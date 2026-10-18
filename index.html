@@ -81,14 +81,14 @@ h1{font-size:clamp(13px,1.6vw,20px);line-height:1.25;margin:3px 0;white-space:no
 "use strict";
 const total=50;
 const $=id=>document.getElementById(id);
-const src=num=>"pages/"+String(num).padStart(3,"0")+".webp";
+const src=num=>"./"+String(num).padStart(3,"0")+".webp";
 const image=num=>num>=1&&num<=total?'<img src="'+src(num)+'" alt="Comic page '+num+' of '+total+'" draggable="false">':"";
 let solo=matchMedia("(max-width:760px)").matches;
 let manualMode=false, spread=0, page=1, animating=false, zoomPage=1, zoomScale=1;
 const lastSpread=Math.ceil(total/2);
 const visible=k=>k===0?[0,1]:[2*k,2*k+1<=total?2*k+1:0];
 function status(message){const e=$("status");e.textContent=message;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),5000)}
-function missingImage(ev){if(ev.target.tagName==="IMG"){status("A comic image is missing. Check that all 50 files are uploaded to the pages/ folder.");ev.target.style.visibility="hidden"}}
+function missingImage(ev){if(ev.target.tagName==="IMG"){status("A comic image is missing. Check that all 50 files are uploaded beside index.html in the repository root.");ev.target.style.visibility="hidden"}}
 $("book").addEventListener("error",missingImage,true);
 $("bigImage").addEventListener("error",missingImage);
 function paint(){
