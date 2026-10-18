@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#102036">
+<meta name="description" content="An illustrated 50-page public health science comic about hepatitis B by Tran Thi Kim Yen.">
+<title>Hepatitis B: The Silent Story Inside Your Liver — Digital Flipbook</title>
+<style>
+:root{color-scheme:dark;--bg:#102036;--gold:#f9b94f;--teal:#9be1d4;--paper:#fff9ec;--white:#f8fafe;--muted:#b9c9d9}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100dvh;color:var(--white);background:radial-gradient(ellipse at 50% -10%,#395e70 0%,#172b43 44%,#0b1729 95%);display:flex;flex-direction:column}
+button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.35;cursor:default}
+.header{position:relative;z-index:2;padding:15px clamp(12px,3vw,40px);border-bottom:1px solid #ffffff23;background:#0b172bc4;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{display:flex;gap:13px;align-items:center;min-width:0}.mark{font-size:25px;border-radius:13px;background:var(--gold);color:#12243b;padding:9px}
+.kicker{color:var(--teal);font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
+h1{font-size:clamp(13px,1.6vw,20px);line-height:1.25;margin:3px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.author{font-size:11px;color:var(--muted)}
+.tools{display:flex;gap:7px;align-items:center}
+.btn{padding:8px 12px;min-height:39px;background:#ffffff11;border:1px solid #ffffff35;color:var(--white);border-radius:10px;font-size:12px;font-weight:700}
+.btn:hover:not(:disabled){background:#ffffff27}.btn:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.stage{flex:1;display:flex;justify-content:center;align-items:center;gap:clamp(4px,2vw,22px);min-height:0;padding:15px 8px}
+.arrow{z-index:3;flex:none;width:49px;height:62px;background:#ffffff1c;border:1px solid #ffffff33;color:#fff;font-size:31px;border-radius:16px;box-shadow:0 9px 18px #0003}
+.arrow:hover:not(:disabled){background:#ffffff35}
+.book{position:relative;isolation:isolate;perspective:2200px;filter:drop-shadow(0 20px 22px #0009);width:min(1080px,calc(100vw - 150px),calc((100dvh - 230px)*1.3333));aspect-ratio:4/3;transition:width .2s}
+.sheet{position:absolute;top:0;height:100%;width:50%;overflow:hidden;background:var(--paper);border:1px solid #ffffff55}
+.sheet.left{left:0;border-radius:8px 0 0 8px;box-shadow:inset -16px 0 22px #0002}
+.sheet.right{right:0;border-radius:0 8px 8px 0;box-shadow:inset 16px 0 22px #0002}
+.sheet img,.single img,.leaf img{width:100%;height:100%;display:block;object-fit:fill;user-select:none}
+.book:not(.solo):after{content:"";width:4px;height:100%;background:linear-gradient(90deg,#0008,#ffffff44,#0008);position:absolute;top:0;left:calc(50% - 2px);pointer-events:none;z-index:4}
+.leaf{position:absolute;top:0;left:50%;height:100%;width:50%;z-index:6;transform-origin:left center;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.19,.76,.26,1);display:none;pointer-events:none}
+.face{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper);box-shadow:0 3px 18px #0007}.face.back{transform:rotateY(180deg)}
+.single{position:absolute;inset:0;border-radius:9px;overflow:hidden;background:var(--paper);display:none;box-shadow:0 0 0 1px #fff4}
+.book.solo{aspect-ratio:2/3;width:min(610px,calc(100vw - 130px),calc((100dvh - 230px)*.66667))}
+.book.solo .sheet{display:none}.book.solo .single{display:block}
+.footer{display:flex;align-items:center;gap:18px;padding:13px clamp(12px,3vw,40px);border-top:1px solid #ffffff23;background:#0b172bc4}
+.progress-info{width:160px;flex:none}.progress-info strong{display:block;font-size:13px}.progress-info small{color:var(--muted);font-size:11px}
+#seek{flex:1;min-width:30px;accent-color:var(--gold)}
+.jump{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12px}
+.jump input{width:57px;height:36px;background:#ffffff18;border:1px solid #ffffff4d;color:white;text-align:center;border-radius:8px}
+.modal{position:fixed;inset:0;z-index:50;background:#07101aeb;display:none;flex-direction:column;align-items:center;padding:12px}
+.modal.open{display:flex}.modal-bar{display:flex;align-items:center;justify-content:space-between;width:min(98vw,1180px);gap:6px;margin-bottom:10px}
+.modal-tools{display:flex;gap:5px;align-items:center}
+.modal-scroll{flex:1;overflow:auto;width:100%;display:flex;align-items:safe center;justify-content:safe center}
+.modal-scroll img{width:min(85vw,650px);height:auto;max-width:none;margin:auto;box-shadow:0 16px 50px #0009;object-fit:contain}
+.status{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);padding:9px 16px;background:#823f35;border:1px solid #ffe3ce;border-radius:12px;color:white;font-size:12px;max-width:90vw;display:none;z-index:20;text-align:center}
+.status.show{display:block}
+@media(max-width:760px){
+.header{padding:10px}.mark{font-size:18px;padding:8px}h1{max-width:44vw;font-size:13px}.author{font-size:10px}.kicker{font-size:9px}.tools{gap:4px}.btn{padding:8px}
+.stage{padding:8px 1px;gap:2px}.arrow{width:35px;height:49px;border-radius:9px;font-size:26px}
+.book.solo{width:min(calc(100vw - 82px),calc((100dvh - 180px)*.66667))}
+.footer{padding:10px 8px;gap:9px}.progress-info{width:100px}.progress-info strong{font-size:11px}.progress-info small{font-size:9px}.jump input{width:42px}}
+@media(prefers-reduced-motion:reduce){.leaf,.book{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="brand"><div class="mark" aria-hidden="true">📖</div><div style="min-width:0"><div class="kicker">Interactive science comic · 50 pages</div><h1>Hepatitis B: The Silent Story Inside Your Liver</h1><div class="author">by Tran Thi Kim Yen</div></div></div>
+  <div class="tools"><button class="btn" id="mode" title="Toggle one/two pages">▥ <span id="modeText">Two pages</span></button><button class="btn" id="zoom" title="Zoom current page">⌕ Zoom</button><button class="btn" id="fullscreen" title="Fullscreen">⛶</button></div>
+</header>
+<main class="stage">
+  <button class="arrow" id="previous" aria-label="Previous page">‹</button>
+  <div class="book" id="book" aria-label="50-page interactive comic book">
+    <div class="sheet left" id="left"></div><div class="sheet right" id="right"></div>
+    <div class="leaf" id="leaf"><div class="face front" id="front"></div><div class="face back" id="back"></div></div>
+    <div class="single" id="single"><img id="singleImage" alt="Comic page"></div>
+  </div>
+  <button class="arrow" id="next" aria-label="Next page">›</button>
+</main>
+<footer class="footer">
+  <div class="progress-info"><strong id="pageText">Cover · 01 / 50</strong><small id="viewText">Two-page reading</small></div>
+  <input id="seek" type="range" min="1" max="50" value="1" aria-label="Jump to page">
+  <label class="jump">Page <input id="jump" type="number" min="1" max="50" value="1" aria-label="Page number"></label>
+</footer>
+<div class="status" id="status" role="alert"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Enlarged comic page">
+  <div class="modal-bar"><strong id="zoomLabel">Page 01 / 50</strong><div class="modal-tools"><button class="btn" id="zoomPrevious">‹</button><button class="btn" id="minus">−</button><span id="factor">100%</span><button class="btn" id="plus">+</button><button class="btn" id="zoomNext">›</button><button class="btn" id="close">× Close</button></div></div>
+  <div class="modal-scroll" id="scroll"><img id="bigImage" alt="Enlarged comic page"></div>
+</div>
+<script>
+"use strict";
+const total=50;
+const $=id=>document.getElementById(id);
+const src=num=>"pages/"+String(num).padStart(3,"0")+".webp";
+const image=num=>num>=1&&num<=total?'<img src="'+src(num)+'" alt="Comic page '+num+' of '+total+'" draggable="false">':"";
+let solo=matchMedia("(max-width:760px)").matches;
+let manualMode=false, spread=0, page=1, animating=false, zoomPage=1, zoomScale=1;
+const lastSpread=Math.ceil(total/2);
+const visible=k=>k===0?[0,1]:[2*k,2*k+1<=total?2*k+1:0];
+function status(message){const e=$("status");e.textContent=message;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),5000)}
+function missingImage(ev){if(ev.target.tagName==="IMG"){status("A comic image is missing. Check that all 50 files are uploaded to the pages/ folder.");ev.target.style.visibility="hidden"}}
+$("book").addEventListener("error",missingImage,true);
+$("bigImage").addEventListener("error",missingImage);
+function paint(){
+  $("book").classList.toggle("solo",solo);
+  $("leaf").style.display="none";
+  if(solo){$("singleImage").src=src(page);$("singleImage").alt="Page "+page+" of 50";}
+  else{const ps=visible(spread);$("left").innerHTML=image(ps[0]);$("right").innerHTML=image(ps[1]);}
+  const displayPage=solo?page:(spread===0?1:Math.min(total,spread*2));
+  $("pageText").textContent=solo?"Page "+page+" / 50":spread===0?"Cover · 01 / 50":spread===lastSpread?"Page 50 / 50":"Pages "+(spread*2)+"–"+Math.min(total,spread*2+1)+" / 50";
+  $("viewText").textContent=solo?"Single-page reading":"Two-page reading";
+  $("seek").value=displayPage;$("jump").value=displayPage;
+  $("previous").disabled=solo?page===1:spread===0;
+  $("next").disabled=solo?page===total:spread===lastSpread;
+  $("modeText").textContent=solo?"Single page":"Two pages";
+  for(let i=displayPage;i<=Math.min(total,displayPage+3);i++){const warm=new Image();warm.src=src(i);}
+}
+function go(where){
+  if(animating)return;
+  if(solo){const next=Math.max(1,Math.min(total,page+(where==="next"?1:-1)));if(next===page)return;page=next;paint();return;}
+  const next=spread+(where==="next"?1:-1);if(next<0||next>lastSpread)return;
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){spread=next;paint();return;}
+  animating=true;
+  const old=visible(spread),newP=visible(next),forward=where==="next";
+  $("left").innerHTML=image(forward?old[0]:newP[0]);
+  $("right").innerHTML=image(forward?newP[1]:old[1]);
+  $("front").innerHTML=image(forward?old[1]:newP[1]);
+  $("back").innerHTML=image(forward?newP[0]:old[0]);
+  const leaf=$("leaf");
+  leaf.style.display="block";leaf.style.transition="none";
+  leaf.style.transform=forward?"rotateY(0deg)":"rotateY(-180deg)";
+  void leaf.offsetWidth;
+  leaf.style.transition="transform .7s cubic-bezier(.19,.76,.26,1)";
+  requestAnimationFrame(()=>leaf.style.transform=forward?"rotateY(-180deg)":"rotateY(0deg)");
+  let finished=false;
+  const done=()=>{if(finished)return;finished=true;spread=next;animating=false;leaf.removeEventListener("transitionend",done);paint()};
+  leaf.addEventListener("transitionend",done,{once:true});setTimeout(done,900);
+}
+function toPage(value){if(animating)return;const n=Math.max(1,Math.min(total,Number(value)||1));if(solo)page=n;else spread=Math.floor(n/2);paint()}
+function changeMode(auto){
+  if(animating)return;
+  if(solo)spread=Math.floor(page/2);else page=spread===0?1:Math.min(total,spread*2);
+  solo=!solo;if(!auto)manualMode=true;paint();
+}
+$("next").addEventListener("click",()=>go("next"));
+$("previous").addEventListener("click",()=>go("prev"));
+$("seek").addEventListener("input",e=>toPage(e.target.value));
+$("jump").addEventListener("change",e=>toPage(e.target.value));
+$("mode").addEventListener("click",()=>changeMode(false));
+$("fullscreen").addEventListener("click",()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.());
+function zoom(){zoomPage=solo?page:(spread===0?1:Math.min(total,spread*2));zoomScale=1;$("modal").classList.add("open");showZoom();}
+function showZoom(){zoomPage=Math.max(1,Math.min(total,zoomPage));$("bigImage").src=src(zoomPage);$("bigImage").style.width=Math.round(Math.min(window.innerWidth*.82,600)*zoomScale)+"px";$("factor").textContent=Math.round(zoomScale*100)+"%";$("zoomLabel").textContent="Page "+zoomPage+" / 50";$("zoomPrevious").disabled=zoomPage===1;$("zoomNext").disabled=zoomPage===50}
+$("zoom").addEventListener("click",zoom);
+$("close").addEventListener("click",()=>$("modal").classList.remove("open"));
+$("minus").addEventListener("click",()=>{zoomScale=Math.max(.5,zoomScale-.25);showZoom()});
+$("plus").addEventListener("click",()=>{zoomScale=Math.min(4,zoomScale+.25);showZoom()});
+$("zoomNext").addEventListener("click",()=>{zoomPage++;showZoom()});
+$("zoomPrevious").addEventListener("click",()=>{zoomPage--;showZoom()});
+$("modal").addEventListener("click",e=>{if(e.target===$("modal"))$("modal").classList.remove("open")});
+document.addEventListener("keydown",e=>{
+  if(["INPUT","TEXTAREA"].includes(document.activeElement.tagName))return;
+  if(e.key==="Escape")$("modal").classList.remove("open");
+  if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();if($("modal").classList.contains("open")){zoomPage++;showZoom()}else go("next")}
+  if(e.key==="ArrowLeft"){e.preventDefault();if($("modal").classList.contains("open")){zoomPage--;showZoom()}else go("prev")}
+  if(e.key==="Home"){e.preventDefault();toPage(1)}
+  if(e.key==="End"){e.preventDefault();toPage(50)}
+});
+let startX=null,startY=null;
+$("book").addEventListener("touchstart",e=>{startX=e.changedTouches[0].screenX;startY=e.changedTouches[0].screenY},{passive:true});
+$("book").addEventListener("touchend",e=>{if(startX===null)return;const dx=e.changedTouches[0].screenX-startX;const dy=e.changedTouches[0].screenY-startY;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.25)go(dx<0?"next":"prev");startX=null},{passive:true});
+window.addEventListener("resize",()=>{if(!manualMode&&solo!==(window.innerWidth<=760))changeMode(true)});
+paint();
+</script>
+</body>
+</html>
